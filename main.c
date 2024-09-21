@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
@@ -8,6 +9,7 @@
 #include "driverlib/uart.h"
 #include "driverlib/pin_map.h"  // This is essential for pin mapping.
 #include "inc\hw_gpio.h"
+#include "utils/uartstdio.h"
 
 #define GPIO_PA6_U2RX           0x00001801
 #define GPIO_PA7_U2TX           0x00001C01
@@ -15,9 +17,8 @@
 
 void UART0_Init(void);
 
-
 /**
- * main.c
+ * main.c+
  */
 int main(void) {
     // Set system clock to 50 MHz
@@ -25,12 +26,13 @@ int main(void) {
 
     // Initialize UART2
     UART0_Init();
+    UARTStdioConfig(0, 115200, SysCtlClockGet());
+
 
     // Main loop
     while(1) {
         // Example: Send and receive a character
-        UARTCharPut(UART0_BASE, 'A');  // Send 'A'
-       // char received = UARTCharGet(UART2_BASE);  // Receive a character
+        UARTprintf("Hello, UART0! %d\n", 500);
     }
 }
 
@@ -50,6 +52,7 @@ void UART0_Init(void) {
 
     UARTEnable(UART0_BASE);
 }
+
 
 
 
